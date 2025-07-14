@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        @apply antialiased;
+    }
+}
+
+@layer components {
+    .glass-effect {
+        @apply bg-white/80 backdrop-blur-xl border border-white/20;
+    }
+
+    .gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .gradient-secondary {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .gradient-accent {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .text-gradient {
+        @apply bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent;
+    }
+
+    .shadow-glow {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .hover-lift {
+        @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+    }
+}
