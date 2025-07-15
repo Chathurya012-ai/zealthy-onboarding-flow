@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+// Base URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
@@ -6,6 +8,7 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: false // set to true only if using cookies/auth
 });
 
 // API Response Types
@@ -25,8 +28,6 @@ export interface UserData {
     zip: string;
 }
 
-
-
 export interface UserResponse {
     id: number;
     email: string;
@@ -36,26 +37,26 @@ export interface UserResponse {
     createdAt: string;
 }
 
-// API Functions
+// API Service Functions
 export const apiService = {
-    // Get configuration for onboarding steps
+    // GET /api/config
     getConfig: async (): Promise<ConfigResponse> => {
         const response = await api.get<ConfigResponse>('/api/config');
         return response.data;
     },
 
-    // Save user data
+    // POST /api/user
     saveUser: async (userData: UserData): Promise<void> => {
         await api.post('/api/user', userData);
     },
 
-    // Get all users
+    // GET /api/user/all
     getAllUsers: async (): Promise<UserResponse[]> => {
         const response = await api.get<UserResponse[]>('/api/user/all');
         return response.data;
     },
 
-    // Update configuration (for admin panel)
+    // POST /api/config (admin update)
     updateConfig: async (config: ConfigResponse): Promise<void> => {
         await api.post('/api/config', config);
     },
