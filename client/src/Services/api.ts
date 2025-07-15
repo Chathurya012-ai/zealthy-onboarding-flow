@@ -1,8 +1,32 @@
 import axios from 'axios';
 
-const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+const API_BASE_URL = 'http://localhost:8080';
+
+const api = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
+
+// API Response Types
+export interface ConfigResponse {
+    page2Components: string[];
+    page3Components: string[];
+}
+
+export interface UserData {
+    email: string;
+    password: string;
+    aboutMe: string;
+    birthdate: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+}
+
+
 
 export interface UserResponse {
     id: number;
@@ -13,42 +37,29 @@ export interface UserResponse {
     createdAt: string;
 }
 
-export interface UserData {
-    email: string;
-    password: string;
-    aboutMe: string;
-    street?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-    birthdate: string;
-}
-
-export interface ConfigResponse {
-    page2Components: string[];
-    page3Components: string[];
-}
-
-
-
+// API Functions
 export const apiService = {
-    getAllUsers: async (): Promise<UserResponse[]> => {
-        const { data } = await API.get<UserResponse[]>('/users');
-        return data;
-    },
-
-    saveUser: async (user: UserData): Promise<UserResponse> => {
-        const { data } = await API.post<UserResponse>('/users', user);
-        return data;
-    },
-
+    // Get configuration for onboarding steps
     getConfig: async (): Promise<ConfigResponse> => {
-        const { data } = await API.get<ConfigResponse>('/config');
-        return data;
+        const response = await api.get<ConfigResponse>('/api/config');
+        return response.data;
     },
 
-    updateConfig: async (cfg: ConfigResponse): Promise<ConfigResponse> => {
-        const { data } = await API.post<ConfigResponse>('/config', cfg);
-        return data;
+    // Save user data
+    saveUser: async (userData: UserData): Promise<void> => {
+        await api.post('/api/user', userData);
+    },
+
+    // Get all users
+    getAllUsers: async (): Promise<UserResponse[]> => {
+        const response = await api.get<UserResponse[]>('/api/user/all');
+        return response.data;
+    },
+
+    // Update configuration (for admin panel)
+    updateConfig: async (config: ConfigResponse): Promise<void> => {
+        await api.post('/api/config', config);
     },
 };
+
+export default api;

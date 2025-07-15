@@ -17,35 +17,40 @@ public class ConfigController {
 
     private final OnboardingConfigRepository configRepository;
 
-    /* ---------- read ---------- */
+    /* ---------- GET /api/config ---------- */
     @GetMapping
     public OnboardingConfig getConfig() {
         return configRepository.findById(1L)
                 .orElseGet(() -> {
                     OnboardingConfig def = new OnboardingConfig(
                             1L,
-                            List.of("aboutMe", "birthdate"),
-                            List.of("address")
+                            List.of("aboutMe", "birthdate"),  // page2Components
+                            List.of("address")               // page3Components
                     );
                     return configRepository.save(def);
                 });
     }
 
-    /* ---------- create / update ---------- */
+    /* ---------- POST /api/config ---------- */
     @PostMapping
     public ResponseEntity<OnboardingConfig> saveConfig(@RequestBody OnboardingConfigDto dto) {
+        System.out.println("👉 Received POST /api/config");
+        System.out.println("page2: " + dto.page2Components());
+        System.out.println("page3: " + dto.page3Components());
 
         OnboardingConfig cfg = new OnboardingConfig();
-        cfg.setId(1L);                       // single-row table
-        cfg.setPage1Components(normalise(dto.page2Components()));
-        cfg.setPage2Components(normalise(dto.page3Components()));
+        cfg.setId(1L);  // ensure it's a single-row config
+        cfg.setPage2Components(normalise(dto.page2Components()));
+        cfg.setPage3Components(normalise(dto.page3Components()));
 
-        return ResponseEntity.ok(configRepository.save(cfg));
+        OnboardingConfig saved = configRepository.save(cfg);
+        System.out.println("✅ Config saved successfully");
+
+        return ResponseEntity.ok(saved);
     }
 
-    /* ---------- helpers ---------- */
+    /* ---------- Helper: Normalize input to List<String> ---------- */
     private List<String> normalise(Object o) {
-        // Supports both ["a","b"] and "a,b"
         if (o == null) return List.of();
         if (o instanceof List<?> list) {
             return list.stream().map(String::valueOf).toList();
@@ -56,10 +61,9 @@ public class ConfigController {
                 .toList();
     }
 
-    /* ---------- DTO ---------- */
+    /* ---------- DTO used by frontend JSON ---------- */
     private record OnboardingConfigDto(
             Object page2Components,
             Object page3Components
     ) {}
 }
-
