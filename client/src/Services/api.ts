@@ -1,11 +1,12 @@
 import axios from 'axios';
 
+// ✅ Hardcoded backend base URL pointing to your Render backend
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: 'https://zealthy-onboarding-flow-backend.onrender.com/api',
 });
 
 export interface UserResponse {
-    id: number;           // ← required for React keys
+    id: number;
     email: string;
     aboutMe?: string;
     address?: string;
@@ -54,6 +55,3 @@ export const apiService = {
         return data;
     },
 };
-
-
-
