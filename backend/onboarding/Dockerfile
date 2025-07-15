@@ -1,7 +1,7 @@
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Stage 1 — build your JAR with Maven
+# Stage 1 — build your JAR with Maven
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FROM maven:3.8.6-openjdk-17-slim AS build
+FROM maven:3.9.7-eclipse-temurin-17-slim AS build
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests -B
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Stage 2 — run it on a minimal JRE
+# Stage 2 — run it on a minimal JRE
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 FROM eclipse-temurin:17-jre-alpine
 
@@ -25,4 +25,4 @@ COPY --from=build /app/target/onboarding-1.0.0.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
