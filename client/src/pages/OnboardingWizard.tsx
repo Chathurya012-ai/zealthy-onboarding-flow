@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { apiService, type ConfigResponse, type UserData } from '../Services/api';
-//import axios from 'axios';
 
 const OnboardingWizard: React.FC = () => {
     const [step, setStep] = useState(1);
     const [config, setConfig] = useState<ConfigResponse>({
+        page1Components: [],
         page2Components: [],
-        page3Components: []
     });
+
     const [userData, setUserData] = useState<UserData>({
         email: '',
         password: '',
@@ -16,8 +16,9 @@ const OnboardingWizard: React.FC = () => {
         city: '',
         state: '',
         zip: '',
-        birthdate: ''
+        birthdate: '',
     });
+
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [submitting, setSubmitting] = useState(false);
 
@@ -25,10 +26,7 @@ const OnboardingWizard: React.FC = () => {
         const fetchConfig = async () => {
             try {
                 const data = await apiService.getConfig();
-                setConfig({
-                    page2Components: data.page2Components ?? [],
-                    page3Components: data.page3Components ?? []
-                });
+                setConfig(data);
             } catch (err) {
                 console.error('Failed to load config', err);
             }
@@ -62,7 +60,6 @@ const OnboardingWizard: React.FC = () => {
         try {
             await apiService.saveUser(userData);
             alert('✅ Submitted successfully!');
-            // reset wizard
             setUserData({
                 email: '',
                 password: '',
@@ -71,7 +68,7 @@ const OnboardingWizard: React.FC = () => {
                 city: '',
                 state: '',
                 zip: '',
-                birthdate: ''
+                birthdate: '',
             });
             setStep(1);
         } catch (err) {
@@ -82,41 +79,38 @@ const OnboardingWizard: React.FC = () => {
         }
     };
 
-    const renderFields = (pageKey: keyof ConfigResponse) => {
-        const comps = config[pageKey] ?? [];
-        return (
-            <div className="space-y-4 mt-4">
-                {comps.includes('aboutMe') && (
-                    <textarea
-                        name="aboutMe"
-                        value={userData.aboutMe}
-                        onChange={handleChange}
-                        placeholder="Tell us about yourself..."
-                        rows={4}
-                        className="w-full border p-2 rounded"
-                    />
-                )}
-                {comps.includes('address') && (
-                    <input
-                        name="street"
-                        value={userData.street}
-                        onChange={handleChange}
-                        placeholder="Street"
-                        className="w-full border p-2 rounded"
-                    />
-                )}
-                {comps.includes('birthdate') && (
-                    <input
-                        type="date"
-                        name="birthdate"
-                        value={userData.birthdate}
-                        onChange={handleChange}
-                        className="w-full border p-2 rounded"
-                    />
-                )}
-            </div>
-        );
-    };
+    const renderFields = (components: string[]) => (
+        <div className="space-y-4 mt-4">
+            {components.includes('aboutMe') && (
+                <textarea
+                    name="aboutMe"
+                    value={userData.aboutMe}
+                    onChange={handleChange}
+                    placeholder="Tell us about yourself..."
+                    rows={4}
+                    className="w-full border p-2 rounded"
+                />
+            )}
+            {components.includes('address') && (
+                <input
+                    name="street"
+                    value={userData.street}
+                    onChange={handleChange}
+                    placeholder="Street"
+                    className="w-full border p-2 rounded"
+                />
+            )}
+            {components.includes('birthdate') && (
+                <input
+                    type="date"
+                    name="birthdate"
+                    value={userData.birthdate}
+                    onChange={handleChange}
+                    className="w-full border p-2 rounded"
+                />
+            )}
+        </div>
+    );
 
     return (
         <div className="max-w-xl mx-auto bg-white p-6 mt-10 rounded-lg shadow-lg">
@@ -146,8 +140,8 @@ const OnboardingWizard: React.FC = () => {
                 </div>
             )}
 
-            {step === 2 && renderFields('page2Components')}
-            {step === 3 && renderFields('page3Components')}
+            {step === 2 && renderFields(config.page1Components)}
+            {step === 3 && renderFields(config.page2Components)}
 
             <div className="flex justify-between mt-6">
                 {step > 1 && (
@@ -156,7 +150,10 @@ const OnboardingWizard: React.FC = () => {
                     </button>
                 )}
                 {step < 3 ? (
-                    <button onClick={handleNext} className="px-4 py-2 bg-blue-600 text-white rounded">
+                    <button
+                        onClick={handleNext}
+                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                    >
                         Next
                     </button>
                 ) : (
@@ -174,6 +171,3 @@ const OnboardingWizard: React.FC = () => {
 };
 
 export default OnboardingWizard;
-
-
-
