@@ -1,15 +1,14 @@
-import axios from 'axios';
+import axios from 'axios'
+const API_BASE_URL = import.meta.env.VITE_API_BASE
 
-// Base URL from environment
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-
-const api = axios.create({
+export const api = axios.create({
     baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: false // set to true only if using cookies/auth
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: false
 });
+
+// expose it so you can inspect it in the browser console:
+;(window as any).API_BASE = api.defaults.baseURL;
 
 // API Response Types
 export interface ConfigResponse {

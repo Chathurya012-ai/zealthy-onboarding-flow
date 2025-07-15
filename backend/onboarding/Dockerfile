@@ -1,13 +1,12 @@
-# === STAGE 1: Build the JAR ===
-FROM maven:3.9.4-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY . .
-RUN mvn clean install -DskipTests
+FROM eclipse-temurin:17-jre-alpine
 
-# === STAGE 2: Run the Spring Boot App ===
-FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
+
+# copy the built jar
 COPY --from=build /app/target/onboarding-1.0.0.jar app.jar
 
+# expose the port your Spring Boot app listens on
 EXPOSE 8080
+
+# tell Docker how to start it
 ENTRYPOINT ["java", "-jar", "app.jar"]
