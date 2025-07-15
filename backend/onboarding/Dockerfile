@@ -1,28 +1,13 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Stage 1 — build your JAR with Maven
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FROM maven:3.9.7-eclipse-temurin-17-slim AS build
-
+# Dockerfile
+FROM maven:3.9.5-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# copy in just the POM so we can cache dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
-
-# now copy the rest of the source and package
+RUN mvn dependency:go-offline
 COPY src ./src
-RUN mvn clean package -DskipTests -B
+RUN mvn clean package -DskipTests
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Stage 2 — run it on a minimal JRE
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-FROM eclipse-temurin:17-jre-alpine
-
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
-
-# grab the fat JAR from the 'build' stage
-COPY --from=build /app/target/onboarding-1.0.0.jar app.jar
-
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]

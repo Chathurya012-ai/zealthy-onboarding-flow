@@ -1,14 +1,13 @@
-
 package com.zealthy.onboarding.dto;
 
-import lombok.*;
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Builder
 public class OnboardingConfigDto {
-    private List<String> page2Components;
-    private List<String> page3Components;
+    private Object page2Components;
+    private Object page3Components;
 }
