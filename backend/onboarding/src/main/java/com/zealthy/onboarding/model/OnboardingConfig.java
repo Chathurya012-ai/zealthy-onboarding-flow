@@ -22,12 +22,12 @@ public class OnboardingConfig {
     @CollectionTable(name = "page1_components",
             joinColumns = @JoinColumn(name = "config_id"))
     @Column(name = "component")
-    private List<String> page1Components;
+    private List<String> page2Components;
 
     @ElementCollection
     @CollectionTable(name = "page2_components",
             joinColumns = @JoinColumn(name = "config_id"))
     @Column(name = "component")
-    private List<String> page2Components;
+    private List<String> page3Components;
 }
 

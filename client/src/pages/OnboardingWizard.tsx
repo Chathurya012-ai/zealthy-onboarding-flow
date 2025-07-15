@@ -4,8 +4,8 @@ import { apiService, type ConfigResponse, type UserData } from '../Services/api'
 const OnboardingWizard: React.FC = () => {
     const [step, setStep] = useState(1);
     const [config, setConfig] = useState<ConfigResponse>({
-        page1Components: [],
         page2Components: [],
+        page3Components: [],
     });
 
     const [userData, setUserData] = useState<UserData>({
@@ -140,7 +140,7 @@ const OnboardingWizard: React.FC = () => {
                 </div>
             )}
             {step === 2 && renderFields(config.page2Components)}
-            {step === 3 && renderFields(config.page1Components)}
+            {step === 3 && renderFields(config.page3Components)}
 
             <div className="flex justify-between mt-6">
                 {step > 1 && (

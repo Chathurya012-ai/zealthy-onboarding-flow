@@ -37,8 +37,8 @@ public class ConfigController {
 
         OnboardingConfig cfg = new OnboardingConfig();
         cfg.setId(1L);                       // single-row table
-        cfg.setPage1Components(normalise(dto.page1Components()));
-        cfg.setPage2Components(normalise(dto.page2Components()));
+        cfg.setPage1Components(normalise(dto.page2Components()));
+        cfg.setPage2Components(normalise(dto.page3Components()));
 
         return ResponseEntity.ok(configRepository.save(cfg));
     }
@@ -58,8 +58,8 @@ public class ConfigController {
 
     /* ---------- DTO ---------- */
     private record OnboardingConfigDto(
-            Object page1Components,
-            Object page2Components
+            Object page2Components,
+            Object page3Components
     ) {}
 }
 

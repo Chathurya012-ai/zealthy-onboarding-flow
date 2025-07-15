@@ -25,9 +25,11 @@ export interface UserData {
 }
 
 export interface ConfigResponse {
-    page1Components: string[];
     page2Components: string[];
+    page3Components: string[];
 }
+
+
 
 export const apiService = {
     getAllUsers: async (): Promise<UserResponse[]> => {
