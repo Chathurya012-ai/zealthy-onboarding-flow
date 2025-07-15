@@ -15,7 +15,6 @@ import java.util.List;
 public class OnboardingConfig {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ElementCollection

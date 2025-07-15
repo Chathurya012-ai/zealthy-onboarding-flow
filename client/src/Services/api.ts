@@ -41,24 +41,24 @@ export interface UserResponse {
 export const apiService = {
     // GET /api/config
     getConfig: async (): Promise<ConfigResponse> => {
-        const response = await api.get<ConfigResponse>('/api/config');
+        const response = await api.get<ConfigResponse>('/config');
         return response.data;
     },
 
     // POST /api/user
     saveUser: async (userData: UserData): Promise<void> => {
-        await api.post('/api/user', userData);
+        await api.post('/user', userData);
     },
 
     // GET /api/user/all
     getAllUsers: async (): Promise<UserResponse[]> => {
-        const response = await api.get<UserResponse[]>('/api/user/all');
+        const response = await api.get<UserResponse[]>('/user/all');
         return response.data;
     },
 
     // POST /api/config (admin update)
     updateConfig: async (config: ConfigResponse): Promise<void> => {
-        await api.post('/api/config', config);
+        await api.post('/config', config);
     },
 };
 
