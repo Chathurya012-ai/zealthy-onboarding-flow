@@ -139,9 +139,8 @@ const OnboardingWizard: React.FC = () => {
                     {errors.password && <p className="text-red-500">{errors.password}</p>}
                 </div>
             )}
-
-            {step === 2 && renderFields(config.page1Components)}
-            {step === 3 && renderFields(config.page2Components)}
+            {step === 2 && renderFields(config.page2Components)}
+            {step === 3 && renderFields(config.page1Components)}
 
             <div className="flex justify-between mt-6">
                 {step > 1 && (
