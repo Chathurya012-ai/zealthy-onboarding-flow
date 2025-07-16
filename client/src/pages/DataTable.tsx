@@ -1,5 +1,3 @@
-// src/pages/DataTable.tsx
-
 import React, { useState, useEffect } from 'react'
 import { apiService, UserResponse } from '../Services/api'
 
@@ -9,22 +7,17 @@ const DataTable: React.FC = () => {
 
     useEffect(() => {
         apiService.getAllUsers()
-            .then(data => {
-                setUsers(data)
-            })
+            .then(data => setUsers(data))
             .catch(err => {
                 console.error('Error fetching users:', err)
                 setUsers([])
             })
-            .finally(() => {
-                setLoading(false)
-            })
+            .finally(() => setLoading(false))
     }, [])
 
     if (loading) {
         return <div>Loading users…</div>
     }
-
     if (users.length === 0) {
         return <div>No users to display. Try signing up first.</div>
     }
@@ -35,11 +28,10 @@ const DataTable: React.FC = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                 <tr>
-                    <th>Email</th>
-                    <th>About Me</th>
-                    <th>Address</th>
-                    <th>Birthdate</th>
-                    <th>Created At</th>
+                    <th style={{ border: '1px solid #ccc', padding: '0.5rem' }}>Email</th>
+                    <th style={{ border: '1px solid #ccc', padding: '0.5rem' }}>About Me</th>
+                    <th style={{ border: '1px solid #ccc', padding: '0.5rem' }}>Address</th>
+                    <th style={{ border: '1px solid #ccc', padding: '0.5rem' }}>Birthdate</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,13 +39,8 @@ const DataTable: React.FC = () => {
                     <tr key={u.id}>
                         <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>{u.email}</td>
                         <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>{u.aboutMe || '-'}</td>
-                        <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>
-                            {u.address || '-'}
-                        </td>
+                        <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>{u.address || '-'}</td>
                         <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>{u.birthdate || '-'}</td>
-                        <td style={{ border: '1px solid #eee', padding: '0.5rem' }}>
-                            {new Date(u.createdAt).toLocaleString()}
-                        </td>
                     </tr>
                 ))}
                 </tbody>

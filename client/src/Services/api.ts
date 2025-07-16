@@ -7,10 +7,9 @@ const API_BASE_URL = import.meta.env.PROD
 export const api = axios.create({
         baseURL: API_BASE_URL,
         headers: { 'Content-Type': 'application/json' },
-        withCredentials: false,  // switch to true if you later need cookies/auth
+        withCredentials: false,
     })
 
-// expose it so you can inspect it in the browser console:
 ;(window as any).API_BASE = api.defaults.baseURL
 
 // API Response Types
@@ -30,47 +29,35 @@ export interface UserData {
     zip: string
 }
 
+// Removed createdAt here
 export interface UserResponse {
     id: number
     email: string
     aboutMe?: string
     address?: string
     birthdate?: string
-    createdAt: string
 }
 
 // API Service Functions
 export const apiService = {
-    // GET /api/config
     getConfig: async (): Promise<ConfigResponse> => {
-        const response = await api.get<ConfigResponse>('/api/config')
-        return response.data
+        const res = await api.get<ConfigResponse>('/api/config')
+        return res.data
     },
-
-    // POST /api/users
-    saveUser: async (userData: UserData): Promise<void> => {
-        await api.post('/api/users', userData)
+    saveUser: async (u: UserData): Promise<void> => {
+        await api.post('/api/users', u)
     },
-
-    // GET /api/users
     getAllUsers: async (): Promise<UserResponse[]> => {
-        const response = await api.get<UserResponse[]>('/api/users')
-        return response.data
+        const res = await api.get<UserResponse[]>('/api/users')
+        return res.data
     },
-
-    // POST /api/config (admin update)
-    updateConfig: async (config: ConfigResponse): Promise<void> => {
-        await api.post('/api/config', config)
+    updateConfig: async (c: ConfigResponse): Promise<void> => {
+        await api.post('/api/config', c)
     },
-        // …other methods…
-
-        // Legacy: GET /api/user/all
-        getAllUsersLegacy: async (): Promise<UserResponse[]> => {
-            const response = await api.get<UserResponse[]>('/api/user/all')
-            return response.data
-        },
-
-
+    getAllUsersLegacy: async (): Promise<UserResponse[]> => {
+        const res = await api.get<UserResponse[]>('/api/user/all')
+        return res.data
+    },
 }
 
 export default api
